@@ -22,13 +22,3 @@ aaaaaaaaa
 <label for="start">date : </label>
 <input type="date" id="start" name="trip-start" value="" min="1900-01-01">
 
-  <v-date-picker
-        ref="picker"
-        locale="jp-ja"
-        v-model="date"
-        :day-format="date => new Date(date).getDate()"
-        :max="new Date().toISOString().substr(0, 10)"
-        :picker-date="pickerDate"
-        min="1950-01-01"
-        @change="save"
-      ></v-date-picker>
