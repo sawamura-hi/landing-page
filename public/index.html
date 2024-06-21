@@ -41,13 +41,10 @@
       margin-right: 10px;
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 </head>
 
 <body>
   <h1>問題</h1>
-  <div><input type="file" id="fileInput" accept=".xlsx, .xls"></div>
-  <hr>
   <div id="question-header" class="left-align">
     <span id="question-number"></span>
     <button onclick="resetQuestions()">リセット</button>
@@ -61,39 +58,1141 @@
   </div>
 
   <script>
-    let questions = [];
+    const questions = [
+        {
+          "question": "新型コロナウイルス関連破綻の業種別判明件数",
+          "choices": [
+            {
+              "text": "飲食業",
+              "isCorrect": true
+            },
+            {
+              "text": "建設業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "人手不足への対応方法",
+          "choices": [
+            {
+              "text": "正社員の採用",
+              "isCorrect": true
+            },
+            {
+              "text": "パートタイマーなど有期雇用社員の採用",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "原油高・原材料高・ウクライナ危機・円安などの影響の長期化",
+          "choices": [
+            {
+              "text": "既存製品、サービスの値上げ",
+              "isCorrect": true
+            },
+            {
+              "text": "人件費以外の経費削減",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "サプライチェーン内における対策の取組",
+          "choices": [
+            {
+              "text": "在庫管理の強化",
+              "isCorrect": true
+            },
+            {
+              "text": "仕入調達先の分散化・多様化",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "宿泊タイプ別に見た、客室稼働率推移",
+          "choices": [
+            {
+              "text": "シティホテル",
+              "isCorrect": true
+            },
+            {
+              "text": "ビジネスホテル",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "売上高の推移、どちらが大きいか",
+          "choices": [
+            {
+              "text": "大企業",
+              "isCorrect": true
+            },
+            {
+              "text": "中小企業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "中小企業の売上高2019年比どちらが減少幅が大きいか",
+          "choices": [
+            {
+              "text": "生活関連サービス業、娯楽業",
+              "isCorrect": true
+            },
+            {
+              "text": "宿泊業、飲食サービス業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経常利益の推移、どちらが大きいか",
+          "choices": [
+            {
+              "text": "大企業",
+              "isCorrect": true
+            },
+            {
+              "text": "中小企業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "設備投資の推移、どちらが大きいか",
+          "choices": [
+            {
+              "text": "大企業",
+              "isCorrect": true
+            },
+            {
+              "text": "中小企業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "人材確保のための方策",
+          "choices": [
+            {
+              "text": "給与水準の引き上げ",
+              "isCorrect": true
+            },
+            {
+              "text": "長時間労働の是正",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "世界的な原材料不足によるサプライチェーンへの影響",
+          "choices": [
+            {
+              "text": "海外からの原材料・部品供給の遅れ・混乱",
+              "isCorrect": true
+            },
+            {
+              "text": "生産・製造量の減産や遅れ・混乱",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "半導体関連部品を安定的に供給するための取組",
+          "choices": [
+            {
+              "text": "調達先の分散",
+              "isCorrect": true
+            },
+            {
+              "text": "在庫の積み増し",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "感染症流行を踏まえたデジタル化の取組",
+          "choices": [
+            {
+              "text": "IT・デジタルツールの利用環境整備・導入",
+              "isCorrect": true
+            },
+            {
+              "text": "デジタル技術導入に向けた従業員等の巻き込み・意識改革",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "感染症流行後の顧客数増加の取組のうち、効果のあったもの",
+          "choices": [
+            {
+              "text": "営業活動・商談等のサービス化",
+              "isCorrect": true
+            },
+            {
+              "text": "新たな商品・サービスの開発",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "感染症流行を踏まえた事業再構築の実施状況",
+          "choices": [
+            {
+              "text": "新分野展開",
+              "isCorrect": true
+            },
+            {
+              "text": "業態転換",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "カーボンニュートラルの取組を促進するために有効と考えられる制度",
+          "choices": [
+            {
+              "text": "設備・システムを導入する際の補助金・税優遇措置",
+              "isCorrect": true
+            },
+            {
+              "text": "改善状況を診断するツールの提供・導入に向けた補助金",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "価格転嫁力の推移、どちらが大きいか",
+          "choices": [
+            {
+              "text": "大企業製造業",
+              "isCorrect": true
+            },
+            {
+              "text": "中小企業製造業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "従業員一人当たりの付加価値額、どちらが大きいか",
+          "choices": [
+            {
+              "text": "大企業",
+              "isCorrect": true
+            },
+            {
+              "text": "中小企業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "男女別に見た、東京圏への流入者の移住の背景",
+          "choices": [
+            {
+              "text": "希望する職種の仕事が見つからないこと",
+              "isCorrect": true
+            },
+            {
+              "text": "賃金等の待遇が良い仕事が見つからないこと",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "結婚に必要な状況",
+          "choices": [
+            {
+              "text": "経済的に余裕ができること",
+              "isCorrect": true
+            },
+            {
+              "text": "異性と知り合う(出会う)機会があること",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "理想の数の子供を持たない理由",
+          "choices": [
+            {
+              "text": "子育てや教育にお金がかかりすぎるから",
+              "isCorrect": true
+            },
+            {
+              "text": "これ以上、育児の心理的、肉体的負担に耐えられないから",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "イノベーション活動によって得られた効果",
+          "choices": [
+            {
+              "text": "競合との差別化",
+              "isCorrect": true
+            },
+            {
+              "text": "販路拡大(国内・海外)",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "技術戦略を策定する際に必要な情報の入手先",
+          "choices": [
+            {
+              "text": "民間企業(取引先)",
+              "isCorrect": true
+            },
+            {
+              "text": "民間企業(同業他社)",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "工場立地件数と面積の推移",
+          "choices": [
+            {
+              "text": "減少",
+              "isCorrect": true
+            },
+            {
+              "text": "増加",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "三大都市圏の自治体と比べてその他地域の自治体のほうが期待していること",
+          "choices": [
+            {
+              "text": "若年層の雇用促進",
+              "isCorrect": true
+            },
+            {
+              "text": "人口増加",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "立地した際に活用したことのある支援内容",
+          "choices": [
+            {
+              "text": "設備に対する補助金",
+              "isCorrect": true
+            },
+            {
+              "text": "固定資産税の減免",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "国内生産に戻した(戻す)理由",
+          "choices": [
+            {
+              "text": "新型コロナ感染症への対応",
+              "isCorrect": true
+            },
+            {
+              "text": "為替変動",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "期待する支援内容",
+          "choices": [
+            {
+              "text": "固定資産税の減免",
+              "isCorrect": true
+            },
+            {
+              "text": "人材確保に関する支援",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "今後新たに立地する際に想定される課題",
+          "choices": [
+            {
+              "text": "用地情報(所在地、価格、面積等)の収集",
+              "isCorrect": true
+            },
+            {
+              "text": "人材の確保",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "自治体が企業誘致に力を入れていきたい分野",
+          "choices": [
+            {
+              "text": "再生可能エネルギー・カーボンニュートラル関連(水素・アンモニア等)",
+              "isCorrect": true
+            },
+            {
+              "text": "AIチップ・半導体関連",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営戦略策定時に、ターゲットとする市場の分析を進めた際の視点",
+          "choices": [
+            {
+              "text": "ターゲットとする顧客の特徴",
+              "isCorrect": true
+            },
+            {
+              "text": "競合他社の製品・商品・サービスの特徴や参入動向",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営者就任前・就任後において、成長意欲を高めることにつながった交流先",
+          "choices": [
+            {
+              "text": "同業種の経営仲間",
+              "isCorrect": true
+            },
+            {
+              "text": "異業種の経営仲間",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営者が行っているリスキリングの取組内容",
+          "choices": [
+            {
+              "text": "書籍・セミナー受講等による知識の収集",
+              "isCorrect": true
+            },
+            {
+              "text": "社外での勉強会への参加",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "役員・社員に提供しているリスキリングの機会",
+          "choices": [
+            {
+              "text": "書籍・セミナー受講等による知識の収集",
+              "isCorrect": true
+            },
+            {
+              "text": "社外での勉強会への参加",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経歴別に見た、右腕人材を選定した際に重要視した要素",
+          "choices": [
+            {
+              "text": "業務経験の豊富さ",
+              "isCorrect": true
+            },
+            {
+              "text": "経営者、社員のそれぞれと円滑にやりとりするコミュニケーション能力",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "右腕人材を育成した際の工夫・取組",
+          "choices": [
+            {
+              "text": "意識的な権限委譲",
+              "isCorrect": true
+            },
+            {
+              "text": "経営陣との接点の増加",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "内部で育成した変革人材の知識・スキル",
+          "choices": [
+            {
+              "text": "営業",
+              "isCorrect": true
+            },
+            {
+              "text": "製品・商品・サービスの企画・開発",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "外部から確保した変革人材の知識・スキル",
+          "choices": [
+            {
+              "text": "営業",
+              "isCorrect": true
+            },
+            {
+              "text": "経営企画",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "内部で育成した変革人材を選定した際に重要視した要素",
+          "choices": [
+            {
+              "text": "経営者、社員のそれぞれと円滑にやりとりするコミュニケーション能力",
+              "isCorrect": true
+            },
+            {
+              "text": "業務経験の豊富さ",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "変革人材を内部で育成した際の工夫・取組",
+          "choices": [
+            {
+              "text": "経営陣との接点の増加",
+              "isCorrect": true
+            },
+            {
+              "text": "意識的な権限委譲",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "外部から確保した変革人材を選定した際に重要視した要素",
+          "choices": [
+            {
+              "text": "業務経験の豊富さ",
+              "isCorrect": true
+            },
+            {
+              "text": "保有する知識・スキルの希少性",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "変革人材の外部からの確保方法",
+          "choices": [
+            {
+              "text": "知り合い・社員等からの紹介",
+              "isCorrect": true
+            },
+            {
+              "text": "ハローワーク",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "外部から確保した変革人材の契約形態",
+          "choices": [
+            {
+              "text": "自社と雇用契約を結んで転職・転籍する",
+              "isCorrect": true
+            },
+            {
+              "text": "プロジェクトや専門分野をベースに、自社と本業先で、同時に働く",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営の透明性を高める取組を開始したきっかけ",
+          "choices": [
+            {
+              "text": "従業員の増加",
+              "isCorrect": true
+            },
+            {
+              "text": "経営者の交代",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営者からの権限委譲を進めた際の社員の動きに統一感や一貫性を持たせるための工夫・取組の内容",
+          "choices": [
+            {
+              "text": "経営理念・ビジョンの共有",
+              "isCorrect": true
+            },
+            {
+              "text": "人事評価の明確化と処遇の反映",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "新規事業創出に取り組んだ際の組織体制の工夫・取組",
+          "choices": [
+            {
+              "text": "経営者が進捗管理や意思決定を担い、現場での指揮や業務の遂行は現場に任せた",
+              "isCorrect": true
+            },
+            {
+              "text": "新規事業を社内に理解させる取組を行った",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "海外展開の強み別に見た、売上高・経常利益への貢献度",
+          "choices": [
+            {
+              "text": "製品・商品・サービスの独創性・個別性",
+              "isCorrect": true
+            },
+            {
+              "text": "人的資産や組織力、経営理念、顧客ネットワーク、技能等の知的資産",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "後継者の選定理由",
+          "choices": [
+            {
+              "text": "経営者としての自覚・当事者意識を備えたため",
+              "isCorrect": true
+            },
+            {
+              "text": "自社や他社で十分な実務経験を積んだため",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "近年事業承継をした経営者の就任経緯",
+          "choices": [
+            {
+              "text": "親族内承継",
+              "isCorrect": true
+            },
+            {
+              "text": "従業員承継",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業再構築を実施した理由",
+          "choices": [
+            {
+              "text": "既存事業の将来性に対して危機感を抱いていたため",
+              "isCorrect": true
+            },
+            {
+              "text": "新しい主力事業を創出するため",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業再構築の効果",
+          "choices": [
+            {
+              "text": "取引先の増加",
+              "isCorrect": true
+            },
+            {
+              "text": "既存事業とのシナジー発揮",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業再構築を進める上での課題",
+          "choices": [
+            {
+              "text": "人材の確保",
+              "isCorrect": true
+            },
+            {
+              "text": "新たな技術・ノウハウの獲得",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "先代経営者や従業員から理解を得るための取組",
+          "choices": [
+            {
+              "text": "現経営者自ら率先して行動する姿を見せた",
+              "isCorrect": true
+            },
+            {
+              "text": "現経営者自ら、取組の意義やメリットを継続的に発信した",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "M&Aの目的(買い手)",
+          "choices": [
+            {
+              "text": "売上・市場シェアの拡大",
+              "isCorrect": true
+            },
+            {
+              "text": "人材の獲得",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "M&Aを実施する際の障壁(買い手)",
+          "choices": [
+            {
+              "text": "相手従業員等からの理解が得られるか不安がある",
+              "isCorrect": true
+            },
+            {
+              "text": "判断材料としての情報が不足している",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "PMIを実施する際に課題",
+          "choices": [
+            {
+              "text": "自社従業員と相手従業員の一体感の醸成",
+              "isCorrect": true
+            },
+            {
+              "text": "相手先従業員のモチベーション向上",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "M&Aの具体的な効果",
+          "choices": [
+            {
+              "text": "商品・サービスの拡充による売上げ・利益の増加",
+              "isCorrect": true
+            },
+            {
+              "text": "商圏拡大による売上げ・利益の増加",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営者の年代別に見た、現在の事業の企業目的",
+          "choices": [
+            {
+              "text": "40代以降は、仕事の経験・技術・知識・資格等を活かすため。",
+              "isCorrect": true
+            },
+            {
+              "text": "30代以下は自分の裁量で自由に仕事をするため。",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業に対して現在満足していること",
+          "choices": [
+            {
+              "text": "仕事のやりがい・達成感",
+              "isCorrect": true
+            },
+            {
+              "text": "仕事の業務内容",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営者の年代別に見た、企業の準備段階で生じた課題",
+          "choices": [
+            {
+              "text": "事業に必要な専門知識、経営に関する知識・ノウハウが不足していた",
+              "isCorrect": true
+            },
+            {
+              "text": "資金調達方法の目処がつかなかった",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "経営者の年代別に見た、起業に踏み切れた理由",
+          "choices": [
+            {
+              "text": "起業について、相談できる支援者がいた",
+              "isCorrect": true
+            },
+            {
+              "text": "身につけるべきスキルを習得した",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "創業期に確保した重要度の高い人材",
+          "choices": [
+            {
+              "text": "経営者を補佐する右腕人材",
+              "isCorrect": true
+            },
+            {
+              "text": "営業・販売に長けた人材",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "創業期に最も有効だった採用方法",
+          "choices": [
+            {
+              "text": "前職等関係者の採用",
+              "isCorrect": true
+            },
+            {
+              "text": "ハローワーク",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "創業時に実施した差別化の取組内容",
+          "choices": [
+            {
+              "text": "製品・サービスの高機能化",
+              "isCorrect": true
+            },
+            {
+              "text": "類似のない新製品・サービスの開発",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "各成長段階における、確保できた重要度の高い人材",
+          "choices": [
+            {
+              "text": "経営者を補佐する右腕人材",
+              "isCorrect": true
+            },
+            {
+              "text": "営業・販売に長けた人材",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "原材料価格の価格転嫁につながった理由",
+          "choices": [
+            {
+              "text": "原材料価格の変動に応じて交渉が可能なため",
+              "isCorrect": true
+            },
+            {
+              "text": "販売先が原材料・部品価格の市況に理解があるため",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "労務費価格の価格転嫁につながった理由",
+          "choices": [
+            {
+              "text": "販売先と十分な協議を行っているため",
+              "isCorrect": true
+            },
+            {
+              "text": "最低賃金の上昇があったため",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "エネルギーコストの価格転嫁につながった理由",
+          "choices": [
+            {
+              "text": "販売先がエネルギーコストに関する市況に理解があるため",
+              "isCorrect": true
+            },
+            {
+              "text": "エネルギーコストの変動に応じた交渉が可能なため",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業承継をきっかけとしたデジタル化に取り組んだ理由",
+          "choices": [
+            {
+              "text": "顧客・取引先の要請やニーズへ対応するため",
+              "isCorrect": true
+            },
+            {
+              "text": "将来事業の将来性に対しても危機感を抱いていたため",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "デジタル化を推進している部署",
+          "choices": [
+            {
+              "text": "経営者(経営層)",
+              "isCorrect": true
+            },
+            {
+              "text": "推進する部署(人)はない",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "デジタル化に関する支援機関への相談内容",
+          "choices": [
+            {
+              "text": "ITツールの選定",
+              "isCorrect": true
+            },
+            {
+              "text": "ITツールの導入時の支援",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "支援機関が支援経験のある相談内容と最も強みを発揮できる支援内容",
+          "choices": [
+            {
+              "text": "IT専門家の紹介",
+              "isCorrect": true
+            },
+            {
+              "text": "ITツールの選定",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "連携している支援機関",
+          "choices": [
+            {
+              "text": "中小企業診断士",
+              "isCorrect": true
+            },
+            {
+              "text": "よろず支援拠点",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "支援対象起業の業績傾向別に見た、支援の重要性が高まった経営課題",
+          "choices": [
+            {
+              "text": "事業計画策定",
+              "isCorrect": true
+            },
+            {
+              "text": "事業承継・M&A",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "伴走支援の取組の進展がもたらす効果に係る支援機関の認識",
+          "choices": [
+            {
+              "text": "地域内取引の増加",
+              "isCorrect": true
+            },
+            {
+              "text": "DX、GX等の新たな取組の進展",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "支援機関別に見た、他機関に対する理解度",
+          "choices": [
+            {
+              "text": "よろず支援拠点",
+              "isCorrect": true
+            },
+            {
+              "text": "商工会・商工会議所",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "自治体から見た、事業者が地域課題の解決に取り組む意義",
+          "choices": [
+            {
+              "text": "事業者が持つ製品・サービス・ノウハウにより、独自の魅力的な解決方法が可能だから",
+              "isCorrect": true
+            },
+            {
+              "text": "事業者で取り組んだ方が、スピード感を持って取組が進むから",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業者が相談先として利用を検討する支援機関",
+          "choices": [
+            {
+              "text": "金融機関",
+              "isCorrect": true
+            },
+            {
+              "text": "税・法務関係士業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "資金供給を実施している理由",
+          "choices": [
+            {
+              "text": "地域の持続可能性を高める上で必要であるため",
+              "isCorrect": true
+            },
+            {
+              "text": "収益性が見込めるため",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "地域課題解決事業の取組を促進する上で、必要だと思う支援策",
+          "choices": [
+            {
+              "text": "地域課題に関する普及",
+              "isCorrect": true
+            },
+            {
+              "text": "税制上の優遇や補助金",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "地域課題解決事業に取り組む事業者の資金調達方法",
+          "choices": [
+            {
+              "text": "金融機関等からの借入れ",
+              "isCorrect": true
+            },
+            {
+              "text": "別事業の収益等の自己資金",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "金融機関が事業者に対して、現在までに資金供給を実施したことのある地域課題の分野",
+          "choices": [
+            {
+              "text": "設備の維持管理・更新費の増加",
+              "isCorrect": true
+            },
+            {
+              "text": "省エネルギー対策や二酸化炭素の排出抑制への高まり",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業者が自治体や他の事業者と連携したことによるメリット",
+          "choices": [
+            {
+              "text": "企業としての信用度向上につながる",
+              "isCorrect": true
+            },
+            {
+              "text": "販売先に広がる",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業者が自治体と連携した際に感じた課題",
+          "choices": [
+            {
+              "text": "自治体において、意思決定までに時間を要する",
+              "isCorrect": true
+            },
+            {
+              "text": "自治体において、予算や個人情報等の制約が多い",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "事業者が自治体と連携するために取り組んだこと",
+          "choices": [
+            {
+              "text": "国や自治体が主催する場(マッチングイベント、入札)への参加",
+              "isCorrect": true
+            },
+            {
+              "text": "自治体への個別営業",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "感染症流行を通じて行われていると思われる、商店街での取組",
+          "choices": [
+            {
+              "text": "感染防止対策(消毒液の設置、非接触システムの導入、感染・発症等に関する注意喚起等)",
+              "isCorrect": true
+            },
+            {
+              "text": "新たな事業やサービスの提供",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "question": "商店街に期待する役割",
+          "choices": [
+            {
+              "text": "地域住民への身近な購買機会の提供",
+              "isCorrect": true
+            },
+            {
+              "text": "地域の賑わいの創出",
+              "isCorrect": false
+            }
+          ]
+        }
+      ];
+
     let currentQuestionIndex = 0;
-
-    document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
-
-    function handleFileSelect(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[firstSheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-          processExcelData(jsonData);
-        };
-        reader.readAsArrayBuffer(file);
-      }
-    }
-
-    function processExcelData(data) {
-      questions = data.slice(1).map(row => ({
-        question: row[0],
-        choices: [
-          { text: row[1], isCorrect: row[2] === '◯' },
-          { text: row[3], isCorrect: row[4] === '◯' }
-        ]
-      }));
-      currentQuestionIndex = 0; // Reset the current question index
-      shuffle(questions);
-      displayQuestion(currentQuestionIndex);
-    }
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -165,6 +1264,10 @@
       shuffle(questions); // 問題の順番を再度ランダムにする
       displayQuestion(currentQuestionIndex);
     }
+
+    // 最初の質問を表示
+    shuffle(questions);
+    displayQuestion(currentQuestionIndex);
   </script>
 
 </body>
