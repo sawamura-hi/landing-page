@@ -1,69 +1,172 @@
-<div>
-  <h3>電子メールアドレス</h3>
-  <input type="email" id="email">
-</div>
-<div>
-  <h3>メールアドレス</h3>
-  <input type="email" id="emailAddress">
-</div>
+<!DOCTYPE html>
+<html lang="ja">
 
-<div>
-  <h3>文字列</h3>
-  <input type="text" id="start" name="trip-start" value="" min="1900-01-01">
-</div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>問題と答え</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 8px;
+      text-align: left;
+    }
 
-<div>
-  <h3>生年月日</h3>
-  <input type="date" id="start" name="trip-start" value="" min="1900-01-01">
-</div>
+    .hidden {
+      display: none;
+    }
 
-<div>
-  <h3>生年月日</h3>
-  <input type="month" id="start" name="trip-start" value="" min="1900-01-01">
-</div>
+    .answer {
+      color: red;
+    }
 
-<div>
-  <h3>画像</h3>
-  <input type="file" accept="image/*">
-</div>
+    .left-align {
+      text-align: left;
+      display: inline-block;
+      margin: 0 auto;
+    }
 
+    .question {
+      text-align: left;
+      text-decoration: underline;
+      margin: 32px 0 0px 0;
+    }
 
-<form>
-    <div class="nativeDatePicker">
-      <label for="bday">誕生日を入力してください:</label>
-      <input type="date" id="bday" name="bday">
-      <span class="validity"></span>
-    </div>
-    <p class="fallbackLabel">誕生日を入力してください:</p>
-    <div class="fallbackDatePicker">
-      <span>
-        <select id="year" name="year">
-        </select>
-        <label for="year">年</label>
-      </span>
-      <span>
-        <select id="month" name="month">
-          <option selected>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-          <option>6</option>
-          <option>7</option>
-          <option>8</option>
-          <option>9</option>
-          <option>10</option>
-          <option>11</option>
-          <option>12</option>
-        </select>
-        <label for="month">月</label>
-      </span>
-      <span>
-        <select id="day" name="day">
-        </select>
-        <label for="day">日</label>
-      </span>
-    </div>
-</form>
+    .choice-container {
+      display: flex;
+      align-items: center;
+    }
 
-https://teams.microsoft.com/l/meetup-join/19:2521b15c73104f2b888a79c59831b5b0@thread.tacv2/1624019570298?context=%7B%22Tid%22:%224d32208b-fa70-4cf7-8a3a-00d5753625fe%22,%22Oid%22:%2275a79f70-d01d-4e33-b941-c076bdf9dac1%22%7D
+    .choice-button {
+      margin-right: 10px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+
+<body>
+  <h1>問題</h1>
+  <div><input type="file" id="fileInput" accept=".xlsx, .xls"></div>
+  <hr>
+  <div id="question-header" class="left-align">
+    <span id="question-number"></span>
+    <button onclick="resetQuestions()">リセット</button>
+  </div>
+  <div id="question" class="question"></div>
+  <br>
+  <div id="choices" class="left-align"></div>
+  <div>
+    <button onclick="prevQuestion()">前の問題</button>
+    <button onclick="nextQuestion()">次の問題</button>
+  </div>
+
+  <script>
+    let questions = [];
+    let currentQuestionIndex = 0;
+
+    document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          processExcelData(jsonData);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    }
+
+    function processExcelData(data) {
+      questions = data.slice(1).map(row => ({
+        question: row[0],
+        choices: [
+          { text: row[1], isCorrect: row[2] === '◯' },
+          { text: row[3], isCorrect: row[4] === '◯' }
+        ]
+      }));
+      currentQuestionIndex = 0; // Reset the current question index
+      shuffle(questions);
+      displayQuestion(currentQuestionIndex);
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function displayQuestion(index) {
+      const question = questions[index];
+      document.getElementById('question-number').textContent = `${index + 1}/${questions.length}`;
+      document.getElementById('question').textContent = question.question;
+
+      const choicesDiv = document.getElementById('choices');
+      choicesDiv.innerHTML = '';
+      shuffle(question.choices);
+      question.choices.forEach((choice, idx) => {
+        const choiceContainer = document.createElement('div');
+        choiceContainer.className = 'choice-container';
+
+        const choiceButton = document.createElement('button');
+        choiceButton.textContent = '◯';
+        choiceButton.className = 'choice-button';
+        choiceButton.onclick = () => showAnswer();
+
+        const choiceElement = document.createElement('p');
+        choiceElement.textContent = choice.text;
+        choiceElement.id = `choice${idx + 1}`;
+
+        choiceContainer.appendChild(choiceButton);
+        choiceContainer.appendChild(choiceElement);
+        choicesDiv.appendChild(choiceContainer);
+      });
+
+      // 答えを非表示にする
+      document.querySelectorAll('#choices p').forEach(element => {
+        element.style.color = '';
+      });
+    }
+
+    function showAnswer() {
+      const question = questions[currentQuestionIndex];
+      question.choices.forEach((choice, idx) => {
+        const choiceElement = document.getElementById(`choice${idx + 1}`);
+        if (choice.isCorrect) {
+          choiceElement.style.color = 'red';
+        }
+      });
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= questions.length) {
+        currentQuestionIndex = 0; // 最初の問題に戻る
+      }
+      displayQuestion(currentQuestionIndex);
+    }
+
+    function prevQuestion() {
+      currentQuestionIndex--;
+      if (currentQuestionIndex < 0) {
+        currentQuestionIndex = questions.length - 1; // 最後の問題に戻る
+      }
+      displayQuestion(currentQuestionIndex);
+    }
+
+    function resetQuestions() {
+      currentQuestionIndex = 0;
+      shuffle(questions); // 問題の順番を再度ランダムにする
+      displayQuestion(currentQuestionIndex);
+    }
+  </script>
+
+</body>
+
+</html>
