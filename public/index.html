@@ -20,6 +20,14 @@
       color: red;
     }
 
+    .correct {
+      background-color: lightgreen;
+    }
+
+    .incorrect {
+      background-color: lightcoral;
+    }
+
     .left-align {
       text-align: left;
       display: inline-block;
@@ -29,19 +37,16 @@
     .question {
       text-align: left;
       text-decoration: underline;
-      margin: 8px 0 0px 0;
+      margin: 32px 0 0px 0;
     }
 
     .choice-container {
       display: flex;
       align-items: center;
-      margin-top: -8px;
-      margin-bottom: -16px;
-
     }
 
     .choice-button {
-      margin-right: 4px;
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -55,12 +60,12 @@
   <div id="questions-container"></div>
   <br>
   <div>
-    <button onclick="prevQuestions()">前の8問</button>
-    <button onclick="nextQuestions()">次の8問</button>
+    <button onclick="prevQuestions()">前の5問</button>
+    <button onclick="nextQuestions()">次の5問</button>
   </div>
 
   <script>
-    const questions =  [
+    const questions = [
         {
           "question": "新型コロナウイルス関連破綻の業種別判明件数",
           "choices": [
@@ -1195,7 +1200,7 @@
       ];
 
     let currentQuestionIndex = 0;
-    const questionsPerPage = 8;
+    const questionsPerPage = 5;
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -1228,7 +1233,7 @@
           const choiceButton = document.createElement('button');
           choiceButton.textContent = '◯';
           choiceButton.className = 'choice-button';
-          choiceButton.onclick = () => showAnswer(i, idx);
+          choiceButton.onclick = () => handleChoiceSelection(i, idx);
 
           const choiceElement = document.createElement('p');
           choiceElement.textContent = choice.text;
@@ -1243,14 +1248,14 @@
       }
     }
 
-    function showAnswer(questionIndex, choiceIndex) {
+    function handleChoiceSelection(questionIndex, choiceIndex) {
       const question = questions[questionIndex];
       question.choices.forEach((choice, idx) => {
         const choiceElement = document.getElementById(`choice${questionIndex}-${idx + 1}`);
-        if (choice.isCorrect) {
-          choiceElement.style.color = 'red';
+        if (idx === choiceIndex) {
+          choiceElement.style.backgroundColor = choice.isCorrect ? 'lightgreen' : 'lightcoral';
         } else {
-          choiceElement.style.color = '';
+          choiceElement.style.backgroundColor = '';
         }
       });
     }
