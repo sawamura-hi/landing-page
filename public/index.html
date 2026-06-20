@@ -335,15 +335,15 @@
     <nav class="site-nav">
       <div class="site-nav-inner">
         <span class="site-nav-title">中小企業診断士</span>
-        <button class="nav-btn" onclick="showPanel('kakomon')">
+        <button class="nav-btn current" onclick="showPanel('kakomon')">
           過去問リンク集
         </button>
-        <button class="nav-btn current" onclick="showPanel('quiz')">
+        <button class="nav-btn" onclick="showPanel('quiz')">
           白書クイズ
         </button>
       </div>
     </nav>
-    <div id="panel-quiz">
+    <div id="panel-quiz" style="display: none">
       <h1>問題</h1>
       <div id="question-header" class="left-align">
         <span id="question-number"></span>
@@ -356,7 +356,7 @@
         <button onclick="nextQuestions()">次の8問</button>
       </div>
     </div>
-    <div id="panel-kakomon" style="display: none">
+    <div id="panel-kakomon">
       <h1>過去問</h1>
 
       <div class="year-selector">
