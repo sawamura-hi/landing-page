@@ -6,6 +6,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>問題と答え</title>
   <style>
+    .site-nav {
+      background: #1a1a2e;
+      padding: 0;
+      margin: -8px -8px 12px -8px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav-inner {
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      height: 48px;
+    }
+    .site-nav-title {
+      color: #e2e8f0;
+      font-weight: 700;
+      font-size: 0.9em;
+      white-space: nowrap;
+    }
+    .site-nav a {
+      color: #93c5fd;
+      text-decoration: none;
+      font-size: 0.88em;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .site-nav a:hover { background: rgba(255,255,255,0.1); }
+    .site-nav a.current { background: #2563eb; color: #fff; }
+
     body {
       font-family: Arial, sans-serif;
       padding: 8px;
@@ -54,6 +87,13 @@
 </head>
 
 <body>
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <span class="site-nav-title">中小企業診断士 勉強サイト</span>
+      <a href="index.html" class="current">白書クイズ</a>
+      <a href="kakomon.html">過去問リンク集</a>
+    </div>
+  </nav>
   <h1>問題</h1>
   <div id="question-header" class="left-align">
     <span id="question-number"></span>
