@@ -1,0 +1,74 @@
+<template>
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <span class="site-nav-title">中小企業診断士</span>
+      <button
+        class="nav-btn"
+        :class="{ current: activePanel === 'kakomon' }"
+        @click="$emit('change', 'kakomon')"
+      >
+        過去問リンク集
+      </button>
+      <button
+        class="nav-btn"
+        :class="{ current: activePanel === 'quiz' }"
+        @click="$emit('change', 'quiz')"
+      >
+        白書クイズ
+      </button>
+    </div>
+  </nav>
+</template>
+
+<script setup>
+defineProps({ activePanel: String })
+defineEmits(['change'])
+</script>
+
+<style scoped>
+.site-nav {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.site-nav-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.2em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 52px;
+}
+.site-nav-title {
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 0.92em;
+  margin-right: 16px;
+  white-space: nowrap;
+}
+.nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 0.88em;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  font-family: inherit;
+}
+.nav-btn:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+.nav-btn.current {
+  color: #2563eb;
+  background: #eff6ff;
+  font-weight: 700;
+}
+</style>
