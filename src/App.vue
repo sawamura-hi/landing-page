@@ -11,7 +11,7 @@ import KakomonPanel from './components/KakomonPanel.vue'
 import QuizPanel from './components/QuizPanel.vue'
 
 function getPanel() {
-  return window.location.hash === '#/quiz' ? 'quiz' : 'kakomon'
+  return window.location.hash.startsWith('#/quiz') ? 'quiz' : 'kakomon'
 }
 
 const activePanel = ref(getPanel())

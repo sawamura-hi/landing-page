@@ -1,7 +1,7 @@
 <template>
   <nav class="site-nav">
     <div class="site-nav-inner">
-      <span class="site-nav-title">中小企業診断士</span>
+      <a class="site-nav-title" href="#/kakomon">中小企業診断士</a>
       <a
         class="nav-btn"
         :class="{ current: activePanel === 'kakomon' }"
@@ -44,6 +44,8 @@ defineProps({ activePanel: String })
   font-size: 0.92em;
   margin-right: 16px;
   white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
 }
 .nav-btn {
   background: none;

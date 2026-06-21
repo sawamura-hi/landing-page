@@ -27,7 +27,7 @@
               :key="year.key"
               class="tab-btn"
               :class="{ active: activeYear[idx] === yIdx }"
-              @click="activeYear[idx] = yIdx"
+              @click="selectYear(idx, yIdx)"
             >
               {{ year.label }}
             </button>
@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import links from '../data/links.json'
 
 const subjects = [
@@ -91,13 +91,63 @@ const years = [
   { key: 'r2', label: 'R2（2020）' },
 ]
 
-const activeSubject = ref(0)
-const activeYear = reactive(subjects.map(() => 0))
+function getHashParams() {
+  const hash = window.location.hash
+  const queryStr = hash.includes('?') ? hash.split('?')[1] : ''
+  return new URLSearchParams(queryStr)
+}
+
+function updateHash() {
+  const subj = subjects[activeSubject.value].key
+  const year = years[activeYear[activeSubject.value]].key
+  window.history.replaceState(null, '', `#/kakomon?subj=${subj}&year=${year}`)
+}
+
+const params = getHashParams()
+const initialSubjIdx = Math.max(0, subjects.findIndex(s => s.key === params.get('subj')))
+const initialYearIdx = Math.max(0, years.findIndex(y => y.key === params.get('year')))
+
+const activeSubject = ref(initialSubjIdx)
+const activeYear = reactive(subjects.map((_, i) => i === initialSubjIdx ? initialYearIdx : 0))
 
 function selectSubject(idx) {
   activeSubject.value = idx
   activeYear[idx] = 0
+  updateHash()
 }
+
+function selectYear(subjIdx, yearIdx) {
+  activeYear[subjIdx] = yearIdx
+  updateHash()
+}
+
+function onHashChange() {
+  const hash = window.location.hash
+  if (!hash.startsWith('#/kakomon')) return
+
+  const queryStr = hash.includes('?') ? hash.split('?')[1] : ''
+  const p = new URLSearchParams(queryStr)
+  const subjKey = p.get('subj')
+  const yearKey = p.get('year')
+
+  if (!subjKey) {
+    activeSubject.value = 0
+    activeYear[0] = 0
+    updateHash()
+    return
+  }
+
+  const subjIdx = subjects.findIndex(s => s.key === subjKey)
+  if (subjIdx >= 0) activeSubject.value = subjIdx
+  const yearIdx = years.findIndex(y => y.key === yearKey)
+  if (yearIdx >= 0) activeYear[activeSubject.value] = yearIdx
+}
+
+onMounted(() => {
+  if (window.location.hash.startsWith('#/kakomon')) updateHash()
+  window.addEventListener('hashchange', onHashChange)
+})
+onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 </script>
 
 <style scoped>
