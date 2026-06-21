@@ -1,9 +1,9 @@
 <template>
   <div id="panel-quiz">
-    <h1>問題</h1>
-    <div class="question-header left-align">
+    <h1>白書クイズ</h1>
+    <div class="question-header">
       <span>{{ currentIndex + 1 }}〜{{ Math.min(currentIndex + PAGE, questions.length) }} / {{ questions.length }}</span>
-      <button @click="reset">リセット</button>
+      <button class="reset-btn" @click="reset">リセット</button>
     </div>
 
     <div class="questions-container">
@@ -13,7 +13,7 @@
         class="question-block"
       >
         <p class="question">{{ currentIndex + i + 1 }}/{{ questions.length }} {{ q.question }}</p>
-        <div class="left-align">
+        <div class="choices">
           <div
             v-for="(choice, cIdx) in q.shuffled"
             :key="cIdx"
@@ -29,10 +29,9 @@
       </div>
     </div>
 
-    <br />
-    <div>
-      <button @click="prev">前の{{ PAGE }}問</button>
-      <button @click="next">次の{{ PAGE }}問</button>
+    <div class="nav-buttons">
+      <button class="nav-btn" @click="prev">前の{{ PAGE }}問</button>
+      <button class="nav-btn" @click="next">次の{{ PAGE }}問</button>
     </div>
   </div>
 </template>
@@ -97,37 +96,115 @@ function reset() {
 
 <style scoped>
 #panel-quiz {
-  font-family: Arial, sans-serif;
-  padding: 8px;
-  text-align: left;
+  font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
   max-width: 900px;
   margin: 0 auto;
+  padding: 1.5em 1.2em;
+  background: #f5f6f8;
+  color: #222;
 }
+
+#panel-quiz h1 {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  border-bottom: 3px solid #2563eb;
+}
+
 .question-header {
-  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 1em;
+  font-size: 0.9em;
+  color: #64748b;
 }
+
+.reset-btn {
+  padding: 0.3em 0.9em;
+  border: none;
+  background: #dde3f0;
+  color: #444;
+  cursor: pointer;
+  font-size: 0.82em;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.reset-btn:hover { background: #c7d2ea; }
+
 .question-block {
-  margin-bottom: 1.2em;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.2em 1.4em;
+  margin-bottom: 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
 .question {
-  text-align: left;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #1a1a2e;
   text-decoration: underline;
-  margin: 0 0 8px 0;
+  margin: 0 0 0.8em 0;
 }
-.left-align {
-  text-align: left;
-  display: inline-block;
-  margin: 0 auto;
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
+
 .choice-container {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 6px 0;
 }
-.choice-button { flex-shrink: 0; }
-.choice-text { margin: 0; }
+
+.choice-button {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid #dde3f0;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  color: #2563eb;
+  font-size: 1em;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.choice-button:hover { background: #eff6ff; }
+
+.choice-text {
+  margin: 0;
+  font-size: 0.9em;
+  color: #374151;
+  padding: 0.3em 0.6em;
+  border-radius: 4px;
+  line-height: 1.5;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 0.5em;
+}
+
+.nav-btn {
+  padding: 0.5em 1.2em;
+  border: none;
+  background: #dde3f0;
+  color: #444;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.nav-btn:hover { background: #c7d2ea; }
 </style>

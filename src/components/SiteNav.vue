@@ -2,27 +2,22 @@
   <nav class="site-nav">
     <div class="site-nav-inner">
       <span class="site-nav-title">中小企業診断士</span>
-      <button
+      <a
         class="nav-btn"
         :class="{ current: activePanel === 'kakomon' }"
-        @click="$emit('change', 'kakomon')"
-      >
-        過去問リンク集
-      </button>
-      <button
+        href="#/kakomon"
+      >過去問リンク集</a>
+      <a
         class="nav-btn"
         :class="{ current: activePanel === 'quiz' }"
-        @click="$emit('change', 'quiz')"
-      >
-        白書クイズ
-      </button>
+        href="#/quiz"
+      >白書クイズ</a>
     </div>
   </nav>
 </template>
 
 <script setup>
 defineProps({ activePanel: String })
-defineEmits(['change'])
 </script>
 
 <style scoped>
@@ -61,6 +56,7 @@ defineEmits(['change'])
   border-radius: 6px;
   transition: color 0.15s, background 0.15s;
   font-family: inherit;
+  text-decoration: none;
 }
 .nav-btn:hover {
   color: #1e293b;
