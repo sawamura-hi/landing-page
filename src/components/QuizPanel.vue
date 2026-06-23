@@ -3,6 +3,7 @@
     <h1>白書クイズ</h1>
     <div class="question-header">
       <span>{{ currentIndex + 1 }}〜{{ Math.min(currentIndex + PAGE, questions.length) }} / {{ questions.length }}</span>
+      <span class="score">正答率 {{ accuracy }}%（{{ correctCount }}/{{ answeredCount }}）</span>
       <button class="reset-btn" @click="reset">リセット</button>
     </div>
 
@@ -29,9 +30,16 @@
       </div>
     </div>
 
-    <div class="nav-buttons">
-      <button class="nav-btn" @click="prev">前の{{ PAGE }}問</button>
-      <button class="nav-btn" @click="next">次の{{ PAGE }}問</button>
+    <div class="pagination">
+      <button class="page-btn arrow" :disabled="currentPageNum === 1" @click="prev">‹</button>
+      <button
+        v-for="page in totalPages"
+        :key="page"
+        class="page-btn"
+        :class="{ active: page === currentPageNum }"
+        @click="goToPage(page)"
+      >{{ page }}</button>
+      <button class="page-btn arrow" :disabled="currentPageNum === totalPages" @click="next">›</button>
     </div>
   </div>
 </template>
@@ -40,7 +48,7 @@
 import { ref, computed, reactive } from 'vue'
 import rawQuestions from '../data/quiz.json'
 
-const PAGE = 8
+const PAGE = 16
 
 function shuffle(arr) {
   const a = [...arr]
@@ -66,6 +74,28 @@ const currentPage = computed(() =>
   questions.slice(currentIndex.value, currentIndex.value + PAGE)
 )
 
+const totalPages = computed(() => Math.ceil(questions.length / PAGE))
+
+const currentPageNum = computed(() => Math.floor(currentIndex.value / PAGE) + 1)
+
+function goToPage(page) {
+  currentIndex.value = (page - 1) * PAGE
+}
+
+const answeredCount = computed(() => Object.keys(selections).length)
+
+const correctCount = computed(() =>
+  Object.entries(selections).filter(
+    ([qIdx, cIdx]) => questions[qIdx].shuffled[cIdx].isCorrect
+  ).length
+)
+
+const accuracy = computed(() =>
+  answeredCount.value === 0
+    ? 0
+    : Math.round((correctCount.value / answeredCount.value) * 100)
+)
+
 function select(qIdx, cIdx) {
   selections[qIdx] = cIdx
 }
@@ -77,13 +107,11 @@ function choiceColor(qIdx, cIdx) {
 }
 
 function next() {
-  currentIndex.value += PAGE
-  if (currentIndex.value >= questions.length) currentIndex.value = 0
+  if (currentPageNum.value < totalPages.value) currentIndex.value += PAGE
 }
 
 function prev() {
-  currentIndex.value -= PAGE
-  if (currentIndex.value < 0) currentIndex.value = Math.max(0, questions.length - PAGE)
+  if (currentPageNum.value > 1) currentIndex.value -= PAGE
 }
 
 function reset() {
@@ -122,7 +150,13 @@ function reset() {
   color: #64748b;
 }
 
+.score {
+  font-weight: 600;
+  color: #2563eb;
+}
+
 .reset-btn {
+  margin-left: auto;
   padding: 0.3em 0.9em;
   border: none;
   background: #dde3f0;
@@ -136,12 +170,23 @@ function reset() {
 }
 .reset-btn:hover { background: #c7d2ea; }
 
+.questions-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+}
+
 .question-block {
   background: #fff;
   border-radius: 8px;
   padding: 1.2em 1.4em;
-  margin-bottom: 1em;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 640px) {
+  .questions-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 .question {
@@ -188,23 +233,43 @@ function reset() {
   line-height: 1.5;
 }
 
-.nav-buttons {
+.pagination {
   display: flex;
-  gap: 8px;
-  margin-top: 0.5em;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1em;
 }
 
-.nav-btn {
-  padding: 0.5em 1.2em;
-  border: none;
-  background: #dde3f0;
+.page-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.5em;
+  border: 1px solid #dde3f0;
+  background: #fff;
   color: #444;
   cursor: pointer;
   font-size: 0.85em;
   font-weight: 600;
   border-radius: 6px;
-  transition: background 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
   font-family: inherit;
 }
-.nav-btn:hover { background: #c7d2ea; }
+.page-btn:hover:not(:disabled) { background: #eff6ff; }
+
+.page-btn.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.page-btn.arrow {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
 </style>
