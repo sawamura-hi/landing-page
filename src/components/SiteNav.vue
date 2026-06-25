@@ -12,6 +12,11 @@
         :class="{ current: activePanel === 'quiz' }"
         href="#/quiz"
       >白書クイズ</a>
+      <a
+        class="nav-btn"
+        :class="{ current: activePanel === 'library' }"
+        href="#/library"
+      >図書館</a>
     </div>
   </nav>
 </template>

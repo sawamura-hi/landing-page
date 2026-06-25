@@ -2,6 +2,7 @@
   <SiteNav :activePanel="activePanel" />
   <KakomonPanel v-show="activePanel === 'kakomon'" />
   <QuizPanel v-show="activePanel === 'quiz'" />
+  <LibraryPanel v-show="activePanel === 'library'" />
 </template>
 
 <script setup>
@@ -9,9 +10,12 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import SiteNav from './components/SiteNav.vue'
 import KakomonPanel from './components/KakomonPanel.vue'
 import QuizPanel from './components/QuizPanel.vue'
+import LibraryPanel from './components/LibraryPanel.vue'
 
 function getPanel() {
-  return window.location.hash.startsWith('#/quiz') ? 'quiz' : 'kakomon'
+  if (window.location.hash.startsWith('#/quiz')) return 'quiz'
+  if (window.location.hash.startsWith('#/library')) return 'library'
+  return 'kakomon'
 }
 
 const activePanel = ref(getPanel())
