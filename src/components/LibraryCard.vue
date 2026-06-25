@@ -43,7 +43,12 @@
           <button class="month-nav" :disabled="!hasNextMonth" @click="nextMonth">›</button>
         </div>
         <div class="cal-grid">
-          <span v-for="w in WEEKDAYS" :key="w" class="cal-weekday">{{ w }}</span>
+          <span
+            v-for="(w, wi) in WEEKDAYS"
+            :key="w"
+            class="cal-weekday"
+            :class="{ sun: wi === 0, sat: wi === 6 }"
+          >{{ w }}</span>
           <span
             v-for="(cell, i) in calendarCells"
             :key="i"
@@ -51,7 +56,11 @@
             :class="[cell ? cell.status : 'empty', { today: cell && cell.isToday }]"
           >
             <template v-if="cell">
-              <span class="cal-day">{{ cell.day }}</span>
+              <span
+                class="cal-day"
+                :class="{ sun: cell.dayType === 'sun', sat: cell.dayType === 'sat', holiday: cell.holiday }"
+                :title="cell.holiday || undefined"
+              >{{ cell.day }}</span>
               <span v-if="cell.status" class="cal-mark">{{ cell.status === 'closed' ? '休' : '開' }}</span>
             </template>
           </span>
@@ -68,6 +77,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { Calendar } from '@lucide/vue'
+import holidays from '../data/holidays.json'
 
 const props = defineProps({
   library: { type: Object, required: true },
@@ -132,7 +142,14 @@ const calendarCells = computed(() => {
   for (let i = 0; i < firstDay; i++) cells.push(null)
   for (let d = 1; d <= daysInMonth; d++) {
     const key = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
-    cells.push({ day: d, status: schedule.value[key]?.status ?? null, isToday: key === todayKey })
+    const dow = new Date(y, m - 1, d).getDay()
+    cells.push({
+      day: d,
+      status: schedule.value[key]?.status ?? null,
+      isToday: key === todayKey,
+      dayType: dow === 0 ? 'sun' : dow === 6 ? 'sat' : null,
+      holiday: holidays[key] ?? null,
+    })
   }
   return cells
 })
@@ -357,6 +374,8 @@ function nextMonth() {
   color: #64748b;
   padding: 0.3em 0;
 }
+.cal-weekday.sun { color: #dc2626; }
+.cal-weekday.sat { color: #2563eb; }
 .cal-cell {
   aspect-ratio: 1;
   display: flex;
@@ -371,6 +390,8 @@ function nextMonth() {
 .cal-cell.open { background: #ecfdf5; }
 .cal-cell.closed { background: #fef2f2; }
 .cal-day { font-weight: 600; color: #1a1a2e; }
+.cal-day.sun, .cal-day.holiday { color: #dc2626; }
+.cal-day.sat { color: #2563eb; }
 .cal-mark {
   font-size: 0.72em;
   font-weight: 700;
