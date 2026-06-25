@@ -214,8 +214,8 @@ function reset() {
   background: none;
   border: 1px solid #dde3f0;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   cursor: pointer;
   color: #2563eb;
   font-size: 1em;

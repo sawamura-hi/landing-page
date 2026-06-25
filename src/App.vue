@@ -28,5 +28,6 @@ onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 body {
   background: #f5f6f8;
   margin: 0;
+  overflow-x: hidden;
 }
 </style>

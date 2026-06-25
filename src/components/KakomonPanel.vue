@@ -280,4 +280,50 @@ a.kakomon-btn:hover { background: #1d4ed8; }
 a.matome-btn { background: #059669; color: #fff; }
 a.matome-btn:hover { background: #047857; }
 .site-btn.disabled { background: #e5e7eb; color: #9ca3af; }
+
+@media (max-width: 640px) {
+  .layout {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .content {
+    width: 100%;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 4px;
+    position: sticky;
+    top: 52px;
+    background: #f5f6f8;
+    padding: 6px 0;
+    z-index: 50;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sidebar-btn {
+    flex-shrink: 0;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 6px 6px 0 0;
+    white-space: nowrap;
+  }
+  .sidebar-btn.active {
+    border-left-color: transparent;
+    border-bottom-color: #2563eb;
+  }
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .tab-panel {
+    padding: 1.1em 1em;
+  }
+}
 </style>
