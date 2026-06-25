@@ -11,15 +11,13 @@
     </div>
 
     <div v-if="today" class="today-card" :class="today.status">
-      <p class="today-label">本日 {{ formatDate(todayKey) }}（{{ weekday(todayKey) }}）</p>
-      <p class="today-status">{{ today.status === 'open' ? '開館' : '休館' }}</p>
-      <p v-if="today.status === 'open'" class="today-hours">
+      <span class="today-status">{{ today.status === 'open' ? '開館' : '休館' }}</span>
+      <span v-if="today.status === 'open'" class="today-hours">
         {{ today.open }}〜{{ today.close }}
-      </p>
+      </span>
     </div>
     <div v-else class="today-card unknown">
-      <p class="today-status">情報がありません</p>
-      <p class="today-hours">本日（{{ formatDate(todayKey) }}）の開館情報は登録されていません。</p>
+      <span class="today-status">情報なし</span>
     </div>
 
     <h3 class="section-title">今後の予定</h3>
@@ -97,7 +95,7 @@ const upcoming = computed(() =>
   Object.keys(schedule.value)
     .filter(k => k > todayKey)
     .sort()
-    .slice(0, 4)
+    .slice(0, 3)
     .map(k => ({ key: k, ...schedule.value[k] }))
 )
 
@@ -156,7 +154,11 @@ function nextMonth() {
 
 <style scoped>
 .library-card {
-  background: #f5f6f8;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 1.2em 1.3em;
 }
 
 .head-row {
@@ -164,7 +166,9 @@ function nextMonth() {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 1.2em;
+  padding-bottom: 0.9em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #eef1f5;
 }
 .head-text { min-width: 0; }
 .library-name {
@@ -196,23 +200,19 @@ function nextMonth() {
 .calendar-btn:hover { background: #dbeafe; }
 
 .today-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 1.4em 1.6em;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+  border-radius: 8px;
+  padding: 0.7em 1em;
+  background: #f1f5f9;
   border-left: 6px solid #94a3b8;
 }
-.today-card.open { border-left-color: #059669; }
-.today-card.closed { border-left-color: #dc2626; }
+.today-card.open { background: #ecfdf5; border-left-color: #059669; }
+.today-card.closed { background: #fef2f2; border-left-color: #dc2626; }
 
-.today-label {
-  margin: 0 0 0.4em;
-  font-size: 0.9em;
-  color: #64748b;
-}
 .today-status {
-  margin: 0;
-  font-size: 1.8em;
+  font-size: 1.3em;
   font-weight: 700;
   color: #1a1a2e;
 }
@@ -220,27 +220,22 @@ function nextMonth() {
 .today-card.closed .today-status { color: #dc2626; }
 
 .today-hours {
-  margin: 0.3em 0 0;
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: 600;
   color: #374151;
 }
 
 .section-title {
-  font-size: 1.05em;
+  font-size: 0.95em;
   font-weight: 700;
-  color: #1a1a2e;
-  margin: 1.6em 0 0.8em;
+  color: #64748b;
+  margin: 1.2em 0 0.5em;
 }
 
 .upcoming {
   list-style: none;
   padding: 0;
   margin: 0;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
 }
 
 .day-row {

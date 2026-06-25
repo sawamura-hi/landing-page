@@ -38,8 +38,15 @@ const libraries = data.libraries
 }
 
 .library-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2em;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5em 1.5em;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .library-list {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
