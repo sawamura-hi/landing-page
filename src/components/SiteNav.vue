@@ -12,6 +12,11 @@
         :class="{ current: activePanel === 'quiz' }"
         href="#/quiz"
       >白書クイズ</a>
+      <a
+        class="nav-btn"
+        :class="{ current: activePanel === 'library' }"
+        href="#/library"
+      >図書館</a>
     </div>
   </nav>
 </template>
@@ -68,5 +73,20 @@ defineProps({ activePanel: String })
   color: #2563eb;
   background: #eff6ff;
   font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .site-nav-inner {
+    padding: 0 0.8em;
+    gap: 4px;
+  }
+  .site-nav-title {
+    margin-right: 6px;
+    font-size: 0.82em;
+  }
+  .nav-btn {
+    padding: 6px 10px;
+    font-size: 0.82em;
+  }
 }
 </style>
