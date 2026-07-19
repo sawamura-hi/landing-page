@@ -45,7 +45,9 @@
                 :key="q.num"
                 class="q-row"
               >
-                <span class="q-num">{{ q.num }}</span>
+                <span class="q-num" :title="q.note || undefined">
+                  {{ q.num }}<span v-if="q.note" class="note-inline">（全員正解）</span>
+                </span>
                 <a
                   v-if="q.kakomon"
                   class="site-btn kakomon-btn"
@@ -274,6 +276,11 @@ li.q-row:first-child { border-top: none; }
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
+}
+.note-inline {
+  font-weight: 700;
+  color: #92400e;
+  cursor: help;
 }
 a.kakomon-btn { background: #2563eb; color: #fff; }
 a.kakomon-btn:hover { background: #1d4ed8; }
