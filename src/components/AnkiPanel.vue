@@ -39,7 +39,17 @@
           {{ label }}を{{ opened[it.id] ? '隠す' : '見る' }}
         </button>
         <div v-if="opened[it.id]" class="back">
-          <div class="field" v-html="it.answer"></div>
+          <div v-if="is4" class="field" v-html="it.answer"></div>
+          <div v-else class="field flow">
+            <template v-for="(steps, ri) in parseKosshi(it.answer)" :key="ri">
+              <span v-if="ri > 0" class="sep">／</span>
+              <template v-for="(s, si) in steps" :key="si">
+                <span v-if="si > 0" class="arrow" aria-label="→"></span>
+                <span v-if="s.head" class="head">{{ s.head }}</span>
+                <span class="chip">{{ s.text }}</span>
+              </template>
+            </template>
+          </div>
           <div v-if="it.memo" class="memo" v-html="it.memo"></div>
         </div>
       </section>
@@ -82,6 +92,15 @@ const cards = computed(() => {
   const items = group.value.items
   return is4.value ? order.value.map(i => items[i]).filter(Boolean) : items
 })
+
+// 骨子の文字列を「／」で区切り、さらに「→」でチップに分ける。「見出し：」はチップの外に出す。文字の順番は変えない
+function parseKosshi(text) {
+  return text.split('／').map(seg => seg.split('→').map(s => {
+    s = s.trim()
+    const k = s.indexOf('：') + 1
+    return { head: s.slice(0, k), text: s.slice(k).trim() }
+  }))
+}
 
 function toggle(id) {
   opened[id] = !opened[id]
@@ -136,7 +155,7 @@ onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
   min-height: calc(100vh - 52px);
 }
 .inner {
-  max-width: 760px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 24px 16px;
 }
@@ -176,6 +195,38 @@ h1 {
 .field :deep(th:last-child),
 .field :deep(td:last-child) {
   text-align: right;
+}
+/* 行に分けず、全体を1つの流れで折り返す */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 0;
+  padding: 6px 10px;
+}
+.sep {
+  margin: 0 10px 0 4px;
+  color: #888;
+}
+.head {
+  font-size: 14px;
+  margin-right: 4px;
+}
+.chip {
+  padding: 2px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #eee;
+  font-size: 14px;
+  margin-right: 6px;
+}
+.arrow {
+  width: 18px;
+  height: 10px;
+  margin-right: 6px;
+  flex: 0 0 auto;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 10'%3E%3Cpath d='M0 5h15M11 1l5 4-5 4' fill='none' stroke='%23888' stroke-width='1.6'/%3E%3C/svg%3E");
 }
 .reveal {
   cursor: pointer;
