@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:anki": "node scripts/build-anki.mjs"
   },
   "dependencies": {
     "@lucide/vue": "^1.21.0",

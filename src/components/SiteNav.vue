@@ -4,6 +4,11 @@
       <a class="site-nav-title" href="#/kakomon">中小企業診断士</a>
       <a
         class="nav-btn"
+        :class="{ current: activePanel === 'library' }"
+        href="#/library"
+      >図書館</a>
+      <a
+        class="nav-btn"
         :class="{ current: activePanel === 'kakomon' }"
         href="#/kakomon"
       >過去問リンク集</a>
@@ -14,9 +19,9 @@
       >白書クイズ</a>
       <a
         class="nav-btn"
-        :class="{ current: activePanel === 'library' }"
-        href="#/library"
-      >図書館</a>
+        :class="{ current: activePanel === 'anki' }"
+        href="#/anki"
+      >2次暗記</a>
     </div>
   </nav>
 </template>
@@ -78,15 +83,29 @@ defineProps({ activePanel: String })
 @media (max-width: 640px) {
   .site-nav-inner {
     padding: 0 0.8em;
-    gap: 4px;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
   .site-nav-title {
     margin-right: 6px;
     font-size: 0.82em;
   }
   .nav-btn {
-    padding: 6px 10px;
+    padding: 6px 8px;
     font-size: 0.82em;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-nav-title {
+    margin-right: 2px;
+    font-size: 0.76em;
+  }
+  .nav-btn {
+    padding: 6px 5px;
+    font-size: 0.76em;
   }
 }
 </style>

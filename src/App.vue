@@ -3,6 +3,7 @@
   <KakomonPanel v-show="activePanel === 'kakomon'" />
   <QuizPanel v-show="activePanel === 'quiz'" />
   <LibraryPanel v-show="activePanel === 'library'" />
+  <AnkiPanel v-show="activePanel === 'anki'" />
 </template>
 
 <script setup>
@@ -11,10 +12,12 @@ import SiteNav from './components/SiteNav.vue'
 import KakomonPanel from './components/KakomonPanel.vue'
 import QuizPanel from './components/QuizPanel.vue'
 import LibraryPanel from './components/LibraryPanel.vue'
+import AnkiPanel from './components/AnkiPanel.vue'
 
 function getPanel() {
   if (window.location.hash.startsWith('#/quiz')) return 'quiz'
   if (window.location.hash.startsWith('#/library')) return 'library'
+  if (window.location.hash.startsWith('#/anki')) return 'anki'
   return 'kakomon'
 }
 
