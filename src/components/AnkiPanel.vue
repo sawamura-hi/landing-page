@@ -58,9 +58,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
-import kosshi from '../data/anki-kosshi.json'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import jirei4 from '../data/anki-jirei4.json'
+import kosshi from '../data/anki-kosshi.json'
 
 // 各カードに一意なIDを振る（開閉状態の管理用）
 function withIds(j, ji) {
@@ -155,7 +155,6 @@ onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
   min-height: calc(100vh - 52px);
 }
 .inner {
-  max-width: 900px;
   margin: 0 auto;
   padding: 24px 16px;
 }
